@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'DLBase_Example' do
+  pod 'DLBase', :path => '../'
+
+  target 'DLBase_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
