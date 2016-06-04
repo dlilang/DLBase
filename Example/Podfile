@@ -1,11 +1,9 @@
 use_frameworks!
 
 target 'DLBase_Example' do
-  pod 'DLBase', :path => '../'
+    pod 'DLBase', :path => '../'
+end
 
-  target 'DLBase_Tests' do
-    inherit! :search_paths
-
-    
-  end
+target 'DLBase_Tests' do
+    pod 'DLBase', :path => '../'
 end

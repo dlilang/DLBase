@@ -1,0 +1,16 @@
+PODS:
+  - DLBase (0.1.0)
+
+DEPENDENCIES:
+  - DLBase (from `../`)
+
+EXTERNAL SOURCES:
+  DLBase:
+    :path: ../
+
+SPEC CHECKSUMS:
+  DLBase: 4dbd82011d0072885875217a293f5afd9270cc22
+
+PODFILE CHECKSUM: dfa9c59be706c59050ee6b4deb293b5fbe71feb8
+
+COCOAPODS: 1.0.0
