@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'DLBase'
-    s.version          = '0.1.0'
+    s.version          = '0.1.1'
     s.summary          = 'DL基础类库'
     s.author           = { 'dlilang' => 'dlilang@126.com' }
     s.homepage         = 'https://github.com/dlilang/DLBase'
@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/dlilang/DLBase.git', :tag => s.version.to_s }
 
     
-    s.ios.deployment_target = '8.0'
+    s.ios.deployment_target = '7.0'
     s.source_files = 'DLBase/Classes/**/*'
 end
