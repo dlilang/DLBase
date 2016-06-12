@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'DLBase'
-    s.version          = '0.1.1'
+    s.version          = '0.1.2'
     s.summary          = 'DL基础类库'
     s.author           = { 'dlilang' => 'dlilang@126.com' }
     s.homepage         = 'https://github.com/dlilang/DLBase'
