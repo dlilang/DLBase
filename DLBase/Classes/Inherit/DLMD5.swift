@@ -177,8 +177,6 @@ class DLMD5: DLBaseObject {
         valuePointer.destroy()
         valuePointer.dealloc(1)
         
-        print((0xff00000000000000 & 80) as UInt64)
-        
         return bytes
     }
     

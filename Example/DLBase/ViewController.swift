@@ -15,7 +15,23 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         "1234567890".md5().log()
+        
+        //(Single.single() as! Single).xxx()
+        
+        Single.share().xxx()
     }
 
 }
 
+
+class Single: DLBaseSingle {
+    
+    class func share() -> Single {
+        return Single.single() as! Single
+    }
+    
+    func xxx(){
+        print("1234567890")
+    }
+    
+}

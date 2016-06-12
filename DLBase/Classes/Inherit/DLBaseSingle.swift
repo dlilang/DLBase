@@ -11,7 +11,7 @@ import UIKit
 public class DLBaseSingle: DLBaseObject {
 
     // 构造私有化
-    private override init() {
+    required override public init() {
         super.init()
     }
     /** 单列 */
@@ -21,7 +21,7 @@ public class DLBaseSingle: DLBaseObject {
             static var token:dispatch_once_t = 0
         }
         dispatch_once(&DLBS.token) {
-            DLBS.instance = DLBaseSingle()
+            DLBS.instance = self.init()
         }
         return DLBS.instance!
     }
