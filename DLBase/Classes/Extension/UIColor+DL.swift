@@ -14,7 +14,7 @@ public extension UIColor {
     /** 16进制转换成颜色 */
     convenience init(hex:UInt32){
         let  alpha = CGFloat(hex & 0xFF) / 255.0
-        let blue = CGFloat((hex & 0xFF0000) >> 8) / 255.0
+        let blue = CGFloat((hex & 0xFF00) >> 8) / 255.0
         let green = CGFloat((hex & 0xFF0000) >> 16) / 255.0
         let red = CGFloat((hex & 0xFF000000) >> 24) / 255.0
         self.init(red:red, green:green, blue:blue, alpha:alpha)
