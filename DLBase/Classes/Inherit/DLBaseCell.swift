@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class DLBaseCell: UITableViewCell {
+open class DLBaseCell: UITableViewCell {
     
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style:style, reuseIdentifier:reuseIdentifier)
@@ -18,7 +18,7 @@ public class DLBaseCell: UITableViewCell {
         super.init(coder:aDecoder)
         self.loadView()
     }
-    override public func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
         self.loadView()
     }

@@ -8,10 +8,10 @@
 
 import UIKit
 
-public class DLBaseView: UIView {
+open class DLBaseView: UIView {
 
     convenience public init(){
-        self.init(frame:CGRectZero)
+        self.init(frame:CGRect.zero)
         self.loadView()
     }
     override public init(frame:CGRect) {

@@ -15,9 +15,4 @@ public extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).md5()
     }
     
-    /** 转成log输出 */
-    public func log() {
-        print("\(self)")
-    }
-    
 }

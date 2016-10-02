@@ -8,22 +8,16 @@
 
 import UIKit
 
-public class DLBaseSingle: DLBaseObject {
+open class DLBaseSingle:DLBaseObject {
 
-    // 构造私有化
-    required override public init() {
-        super.init()
-    }
     /** 单列 */
-    public class func single() -> DLBaseSingle {
-        struct DLBS {
-            static var instance:DLBaseSingle?
-            static var token:dispatch_once_t = 0
+    required override public init(){}
+    static var instance:DLBaseSingle?
+    open class func single() -> DLBaseSingle {
+        if instance == nil {
+            instance = self.init()
         }
-        dispatch_once(&DLBS.token) {
-            DLBS.instance = self.init()
-        }
-        return DLBS.instance!
+        return instance!
     }
     
 }

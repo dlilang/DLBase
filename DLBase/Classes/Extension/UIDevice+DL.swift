@@ -8,41 +8,38 @@
 
 import UIKit
 
-var _model:String = ""
-var _version:CGFloat = 0
-var _simulator:Bool = false
+/**  */
+let model:String = {
+    var size:Int = 0
+    sysctlbyname("hw.machine", nil, &size, nil, 0)
+    var m = [CChar](repeating: 0, count: Int(size))
+    sysctlbyname("hw.machine", &m, &size, nil, 0)
+    return String(cString:m, encoding: String.Encoding.utf8)!
+}()
+/**  */
+let version:CGFloat = {
+    return CGFloat((UIDevice.current.systemVersion as NSString).floatValue)
+}()
+/**  */
+let simulator:Bool = {
+    return (UIDevice.current.machine == "x86_64" || UIDevice.current.machine == "i386")
+}()
 
 public extension UIDevice {
     
     /** 设备机器信息 */
     var machine:String {
-        var token:dispatch_once_t = 0
-        dispatch_once(&token) {
-            var size:Int = 0
-            sysctlbyname("hw.machine", nil, &size, nil, 0)
-            var m = [CChar](count:Int(size), repeatedValue:0)
-            sysctlbyname("hw.machine", &m, &size, nil, 0)
-            _model = String(CString:m, encoding:NSUTF8StringEncoding)!
-        }
-        return _model
+        return model
     }
     
     /** 系统版本号 */
     var version:CGFloat {
-        var token:dispatch_once_t = 0
-        dispatch_once(&token) {
-            _version = CGFloat((self.systemVersion as NSString).floatValue)
-        }
-        return _version;
+        return version
     }
     
     /** 是否是模拟器 */
     var simulator:Bool {
-        var token:dispatch_once_t = 0
-        dispatch_once(&token) {
-            _simulator = (self.machine == "x86_64" || self.machine == "i386")
-        }
-        return _simulator
+        return simulator
     }
     
 }

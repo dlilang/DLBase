@@ -8,6 +8,6 @@
 
 import UIKit
 
-public class DLBaseModel: DLBaseObject {
+open class DLBaseModel: DLBaseObject {
 
 }

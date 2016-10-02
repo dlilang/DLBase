@@ -37,37 +37,37 @@ public extension UIView {
     }
     
     /** 上 */
-    public func top(top:CGFloat) {
+    public func top(_ top:CGFloat) {
         var frame:CGRect = self.frame
         frame.origin.y = top
         self.frame = frame
     }
     /** 左 */
-    public func left(left:CGFloat) {
+    public func left(_ left:CGFloat) {
         var frame:CGRect = self.frame
         frame.origin.x = left
         self.frame = frame
     }
     /** 宽度 */
-    public func width(width:CGFloat) {
+    public func width(_ width:CGFloat) {
         var frame:CGRect = self.frame
         frame.size.width = width
         self.frame = frame
     }
     /** 高度 */
-    public func height(height:CGFloat) {
+    public func height(_ height:CGFloat) {
         var frame:CGRect = self.frame
         frame.size.height = height
         self.frame = frame
     }
     /** 右 */
-    public func right(right:CGFloat) {
+    public func right(_ right:CGFloat) {
         var frame:CGRect = self.frame
         frame.origin.x = right - frame.size.width
         self.frame = frame
     }
     /** 下 */
-    public func bottom(bottom:CGFloat) {
+    public func bottom(_ bottom:CGFloat) {
         var frame:CGRect = self.frame
         frame.origin.y = bottom - frame.size.height
         self.frame = frame

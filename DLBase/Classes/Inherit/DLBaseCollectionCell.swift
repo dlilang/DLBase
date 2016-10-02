@@ -8,10 +8,10 @@
 
 import UIKit
 
-public class DLBaseCollectionCell: UICollectionViewCell {
+open class DLBaseCollectionCell: UICollectionViewCell {
     
     convenience public init(){
-        self.init(frame:CGRectZero)
+        self.init(frame:CGRect.zero)
     }
     override public init(frame:CGRect) {
         super.init(frame:frame)

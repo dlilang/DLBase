@@ -10,23 +10,20 @@ import UIKit
 
 class DLMD5: DLBaseObject {
     
-    struct BytesSequence: SequenceType {
+    struct BytesSequence: Sequence {
         let chunkSize: Int
         let data: [UInt8]
-        
-        func generate() -> AnyGenerator<ArraySlice<UInt8>> {
-            
+        func makeIterator() -> AnyIterator<ArraySlice<UInt8>> {
             var offset:Int = 0
-            
-            return anyGenerator {
-                let end = min(self.chunkSize, self.data.count - offset)
+            return AnyIterator {
+                let end = Swift.min(self.chunkSize, self.data.count - offset)
                 let result = self.data[offset..<offset + end]
                 offset += result.count
                 return result.count > 0 ? result : nil
             }
         }
     }
-
+    
     static let size:Int = 16 // 128 / 8
     let message: Array<UInt8>
     
@@ -34,26 +31,26 @@ class DLMD5: DLBaseObject {
         self.message = message
     }
     
-    func prepare(len:Int) -> Array<UInt8> {
+    func prepare(_ len:Int) -> Array<UInt8> {
         var tmpMessage = message
         
         let m = tmpMessage.count * 8 % 512
         if m != 448 {
-            tmpMessage += Array<UInt8>(count:(448 - m)/8, repeatedValue:0)
+            tmpMessage += Array<UInt8>(repeating: 0, count: (448 - m)/8)
         }
         
         return tmpMessage
     }
     
     /** specifies the per-round shift amounts */
-    private let s: [UInt32] = [
+    fileprivate let s: [UInt32] = [
         7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
         5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
         4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
         6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21]
     
     /** binary integer part of the sines of integers (Radians) */
-    private let k: [UInt32] = [
+    fileprivate let k: [UInt32] = [
         0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
         0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
         0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,
@@ -71,7 +68,7 @@ class DLMD5: DLBaseObject {
         0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
         0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391]
     
-    private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
+    fileprivate let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
     func calculate() -> [UInt8] {
         var tmpMessage = prepare(64)
@@ -83,7 +80,7 @@ class DLMD5: DLBaseObject {
         // Step 2. Append Length a 64-bit representation of lengthInBits
         let lengthInBits = (message.count * 8)
         let lengthBytes = arrayOfBytes(lengthInBits, length: 64 / 8)
-        tmpMessage += lengthBytes.reverse()
+        tmpMessage += lengthBytes.reversed()
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
@@ -144,38 +141,38 @@ class DLMD5: DLBaseObject {
         return result
     }
     
-    func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {
+    func toUInt32Array(_ slice: ArraySlice<UInt8>) -> Array<UInt32> {
         var result = Array<UInt32>()
         result.reserveCapacity(16)
         
-        for idx in slice.startIndex.stride(to: slice.endIndex, by: sizeof(UInt32)) {
-            let val1:UInt32 = (UInt32(slice[idx.advancedBy(3)]) << 24)
-            let val2:UInt32 = (UInt32(slice[idx.advancedBy(2)]) << 16)
-            let val3:UInt32 = (UInt32(slice[idx.advancedBy(1)]) << 8)
+        for idx in stride(from: slice.startIndex, to: slice.endIndex, by: MemoryLayout<UInt32>.size) {
+            let val1:UInt32 = (UInt32(slice[idx.advanced(by: 3)]) << 24)
+            let val2:UInt32 = (UInt32(slice[idx.advanced(by: 2)]) << 16)
+            let val3:UInt32 = (UInt32(slice[idx.advanced(by: 1)]) << 8)
             let val4:UInt32 = UInt32(slice[idx])
             let val:UInt32 = val1 | val2 | val3 | val4
             result.append(val)
         }
         return result
     }
-    func rotateLeft(v:UInt32, _ n:UInt32) -> UInt32 {
+    func rotateLeft(_ v:UInt32, _ n:UInt32) -> UInt32 {
         return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
     }
     
-    func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
-        let totalBytes = length ?? sizeof(T)
+    func arrayOfBytes<T>(_ value:T, length:Int? = nil) -> [UInt8] {
+        let totalBytes = length ?? MemoryLayout<T>.size
         
-        let valuePointer = UnsafeMutablePointer<T>.alloc(1)
-        valuePointer.memory = value
+        let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
+        valuePointer.pointee = value
         
-        let bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
-        var bytes = [UInt8](count: totalBytes, repeatedValue: 0)
-        for j in 0..<min(sizeof(T),totalBytes) {
-            bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
+        let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
+        var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
+        for j in 0..<min(MemoryLayout<T>.size,totalBytes) {
+            bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
         }
         
-        valuePointer.destroy()
-        valuePointer.dealloc(1)
+        valuePointer.deinitialize()
+        valuePointer.deallocate(capacity: 1)
         
         return bytes
     }
